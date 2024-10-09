@@ -1,8 +1,8 @@
 ---
 title: "qPCR Template"
 subtitle: "Add sample/run description"
-author: "Seth Borrowman"
-date: "10/08/2024"
+author: "Firstname Lastname"
+date: "MM/DD/YYYY"
 format: pdf
 ---
 ```{r}
@@ -18,7 +18,7 @@ library(pander)
 # Import data
 df <- readxl::read_xls("", # Insert file location
                        sheet = "Results",
-                       skip = 46, # Might need to update? Look at excel file
+                       skip = 46,
                        na = c("", "Undetermined")) %>%
   mutate(Ct = CT) %>%
   mutate(Task = case_when(
@@ -56,6 +56,7 @@ ggplot(data = standards,
 # Table with std curve values
 std_curve <- standards %>%
   group_by(`Sample Name`, `Target Name`) %>%
+  # Use mean Ct of replicates
   summarise(Ct = mean(Ct, na.rm = T),
             .groups = "keep") %>%
   pivot_wider(names_from = `Target Name`,
@@ -72,6 +73,7 @@ efficiency_mod_1 <- lm(Ct ~ log10(Quantity),
                        filter(`Target Name` ==
                                 levels(standards$`Target Name`)[1]))
 efficiency1 <- 10^(-1/efficiency_mod_1$coefficients[[2]])
+# Print out as text to pdf
 cat(paste0(levels(standards$`Target Name`)[1],
            " efficiency = ",
            round(efficiency1, digits = 2),
@@ -108,6 +110,7 @@ ntc <- df %>%
             .groups = "keep") %>%
   pivot_wider(names_from = `Target Name`,
               values_from = Ct)
+# Warn if NTC is positive
 if(is.nan(as.data.frame(ntc)[1,2]) & is.nan(as.data.frame(ntc)[1,3])) {
   cat("NTC is negative")
 } else {
@@ -122,6 +125,7 @@ pander::pander(ntc, caption = "NTC mean Ct")
 # Create predictive model
 mod <- lm(log10(Quantity) ~ Ct + `Target Name`, standards)
 
+# Get predicted values
 preds <- predict(mod, unknowns, interval = "prediction") 
 unknowns$Quantity <- 10^preds[,1]
 
@@ -132,6 +136,8 @@ quantities <- unknowns %>%
   pivot_wider(names_from = `Target Name`,
               values_from = Quantity) %>%
   as.data.frame()
+
+# Find ratio of two targets
 ratio_name <- paste(colnames(quantities)[3], ":",
                    colnames(quantities)[2], " Ratio", sep = "")
 quantities$ratio <- (quantities[,3]) / (quantities[,2])
@@ -139,6 +145,7 @@ colnames(quantities)[4] <- ratio_name
 
 pander::pander(quantities, caption = "Calculated gene copy #'s")
 
+# Combine standards, unknowns and plot
 final_df <- rbind(unknowns,
                   standards %>%
                     select(which(colnames(standards) %in% colnames(unknowns))))
