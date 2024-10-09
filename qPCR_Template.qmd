@@ -14,8 +14,11 @@ library(dplyr)
 library(tidyr)
 library(pander)
 
+# Input file location
+input_file <- ""
+
 # Import data
-df <- readxl::read_xls("", # Insert file location
+df <- readxl::read_xls(input_file,
                        sheet = "Results",
                        skip = 46,
                        na = c("", "Undetermined")) %>%
@@ -26,7 +29,7 @@ df <- readxl::read_xls("", # Insert file location
     .default = Task
   ))
 
-# Separate standards and unknwons
+# Separate standards and unknowns
 standards <- df %>%
   filter(Task == "Standard") %>%
   mutate(`Target Name` = factor(`Target Name`))
@@ -96,7 +99,6 @@ cat(paste0(levels(standards$`Target Name`)[2],
            round(summary(efficiency_mod_2)$r.squared, digits = 2),
            sep = ""))
 ```
-\newpage
 # Check NTCs
 ```{r}
 #| echo: false
@@ -160,5 +162,10 @@ ggplot(data = final_df,
               aes(color = `Target Name`),
               data = final_df %>% filter(Task == "Standard")) +
   theme_minimal()
+write_name <- substr(input_file, 1, nchar(input_file)-4)
+write.csv(final_df, row.names = F,
+          paste0(write_name, "_withPredictions.csv"))
+cat(paste0("Full table of values exported to \n",
+           write_name, "_withPredictions.csv"))
 ```
 
