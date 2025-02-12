@@ -7,3 +7,6 @@
   - Can quickly trim sample names in a fasta by removing part of the name matching a regular expression.
   - Takes an input fasta (-i), a regular expression (-r), a string to replace the regex (-n, default=''), and a name for the output fasta (-o).
   - I recommend [this site](https://regex-generator.olafneumann.org/) to easily generate regex.
+- filterFastaSamples.py
+  - Filters fasta files by read/sample names.
+  - Takes an input fasta (-i), a file with a record name to keep on each line (-l), and an optional name for the output (-o, default: filtered.fasta)
