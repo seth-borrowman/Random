@@ -10,3 +10,4 @@
 - filterFastaSamples.py
   - Filters fasta files by read/sample names.
   - Takes an input fasta (-i), a file with a record name to keep on each line (-l), and an optional name for the output (-o, default: filtered.fasta)
+  - Not great with large (>500,000 samples) fasta files - may receive bus error.
