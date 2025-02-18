@@ -13,7 +13,7 @@
   - Not great with large (>500,000 samples) fasta files - may receive bus error.
 - filter_fasta/
   - An attempt to 'oxidize' filterFastaSamples.py (convert it to Rust)
-  - Can be compiled by cloneing or downloading the file and using <code>cargo build --release</code> inside the filter_fasta folder
+  - Can be compiled by cloneing the repo or downloading the folder and using <code>cargo build --release</code> inside the filter_fasta folder
     - Run with <code>./target/release/filter_fasta -i [input.fasta] -l [sample_list] -o [output.fasta]</code>
     - Check file name before running - may change with operating system (eg filter_fasta.exe on Windows)
   - Would like to add parallelization eventually.
