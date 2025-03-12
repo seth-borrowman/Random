@@ -5,7 +5,7 @@ Alignment -> Trimming -> ML Phylogeny -> Phylodynamics
 ## Alignment
 
 ```{shell}
-mafft --auto --thread -1 [input].fasta > [output].fasta
+mafft --auto --thread -1 --keeplength --addfragments [input].fasta [reference].fasta > [output].fasta
 ```
 
 This allows mafft to choose the alignment method and number of threads.
