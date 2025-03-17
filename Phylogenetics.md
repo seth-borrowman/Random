@@ -27,6 +27,7 @@ This allows iqtree2 to choose the phylogenetic model, but limits it to viral mod
 ```{shell}
 treetime \
   --confidence \
+  --covariation \
   --relax 1.0 0.5 \
   --aln [aligned fasta].fasta \
   --tree [ML tree].treefile \
