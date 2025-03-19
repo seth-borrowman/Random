@@ -47,7 +47,7 @@ rm -r medaka
 For your convenience
 ```{shell}
 for i in *.fastq.gz; do \
-  do base=$(basename -s .fastq.gz $i); \
+  base=$(basename -s .fastq.gz $i); \
   minimap2 -ax lr:hq [PATH]/[REFERENCE].fas $i > ${base}.sam; \
   samtools view -e 'rlen>1200' -bS -F 4 -h ${base}.sam > ${base}.bam; \
   samtools fastq ${base}.bam > ${base}_filtered.fastq; \
