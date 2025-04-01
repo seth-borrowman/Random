@@ -2,6 +2,23 @@
 
 Alignment -> Trimming -> ML Phylogeny -> Phylodynamics
 
+The starting point of this workflow should be a fasta file with consensus sequences from different samples. If your consensus sequences are in separate files, but the same folder, you can combine them using something like:
+```{shell}
+for i in *_Consensus.fasta; do \
+  base=$(basename -s _Consensus.fasta $i) \
+  echo ">"${base} >> combined.fasta \
+  tail -n +2 $i >> combined.fasta \
+done
+```
+In this example, if your files are named Sample1_Consensus.fasta, Sample2_Consensus.fasta, etc, you will have returned a file called combined.fasta that looks like
+```{text}
+>Sample1
+ACGT
+>Sample2
+ACGT
+```
+This can be used as your input in the following Alignment step.
+
 ## Alignment
 
 ```{shell}
