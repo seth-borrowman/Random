@@ -1,5 +1,5 @@
 # Viral Sequencing Analysis
-This is a general workflow process for viral sequencing analysis - taking ONT fastq files and creating a consensus sequence and an aligned/sorted bam.
+This is a general workflow process for viral sequencing analysis - taking ONT fastq files and creating a consensus sequence and an aligned/sorted bam. There are some comments provided for analyzing data from other sequencing platforms.
 
 ## Data organization and cleaning
 Concatenate .fastq files from sequencing using `cat`
@@ -20,17 +20,28 @@ Align the reads to the reference genome. For SIV we typically use [SIVMM239](htt
 ```{shell}
 minimap2 -ax lr:hq [PATH]/[REFERENCE].fas [READS].fastq.gz > [NAME].sam
 ```
+This can change slightly if you are using a separate sequencing platform. For example, the following can be used for paired-end reads:
+```{shell}
+minimap2 -ax sr [PATH]/[REFERENCE].fas [READS_1].fastq.gz [READS_2].fastq.gz > [NAME].sam
+```
+See the [minimap documentation](https://github.com/lh3/minimap2/blob/master/README.md) for more details.
+For short-read sequencing data, use [BWA](https://github.com/lh3/bwa?tab=readme-ov-file)
+
 ### Clean up
 This will remove reads that don't map properly and/or have a length < 1200b.
 ```{shell}
 samtools view -e 'rlen>1200' -bS -F 4 -h [NAME].sam > [NAME].bam
 samtools fastq [NAME].bam > [NAME]_filtered.fastq
 ```
+The `-e 'rlen>1200'` option is a QC filter for length. This can be shortened or removed entirely, depending on what you want the minimum fragment length to be.
+
 ## First consensus
 Use [medaka](https://github.com/nanoporetech/medaka) to generate a consensus sequence. We will then use this as our reference for further analysis.
 ```{shell}
 medaka_consensus -i [NAME]_filtered.fastq -d [PATH]/[REFERENCE].fas -o medaka -t [NTHREADS] -m r1041_e82_400bps_sup_v5.0.0 -g
 ```
+The r1041_e82_400bps_sup_v5.0.0 model is the one our lab has been using at the time I'm writing this. You can change this based on your nanopore basecalling model. For sequencing data from other platforms, I recommend using [iVar](https://andersen-lab.github.io/ivar/html/manualpage.html) instead of medaka.
+
 ## Realign and build final consensus
 Use medaka to realign our reads to the new reference, generate a consensus sequence, and create a bam file.
 ```{shell}
