@@ -34,10 +34,10 @@ Trim ends of the alignment and any insertions that only contain ambiguous/missin
 ## ML Phylogeny
 
 ```{shell}
-iqtree2 -s [trimmed input].fas -T AUTO -alrt 1000 --safe -msub viral -nt 8 -cptime 20
+iqtree2 -s [trimmed input].fas -T AUTO -alrt 1000 --safe -msub viral -cptime 20
 ```
 
-This allows iqtree2 to choose the phylogenetic model, but limits it to viral models. It runs a 1000x bootstrap on 8 threads and stores data to allow the user to resume if the job ends prematurely.
+This allows iqtree2 to choose the phylogenetic model, but limits it to viral models. It runs a 1000x bootstrap on an automatically decided number of threads and stores data to allow the user to resume if the job ends prematurely.
 
 If the best model has already been found, it can be specified like `-m GTR+F+I+R5` in place of `-msub viral`
 
