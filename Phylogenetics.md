@@ -4,6 +4,7 @@ Alignment -> Trimming -> ML Phylogeny -> Phylodynamics
 
 The starting point of this workflow should be a fasta file with consensus sequences from different samples. If your consensus sequences are in separate files, but the same folder, you can combine them using something like:
 ```{shell}
+# Concatenate reads
 for i in *_Consensus.fasta; do \
   base=$(basename -s _Consensus.fasta $i) \
   echo ">"${base} >> combined.fasta \
@@ -48,6 +49,7 @@ mamba activate phylogenetics
 An optional step is to apply QC filtering and adapter trimming to your reads. Here, we'll use fastplong to do this. If you're using short-reads (eg. Illumina) instead of long reads (eg. ONT), you can use fastp instead - just be sure to install it into your environment `mamba install fastp`
 
 ```{shell}
+# Quality filter
 fastplong -i [input].fasta -o [output].fasta
 ```
 
@@ -73,6 +75,7 @@ This allows mafft to choose the alignment method and number of threads.
 We now need to remove the reference genome if we don't want it in our phylogenetic tree. This can be done using awk
 
 ```{shell}
+# Remove reference genome
 awk 'BEGIN {keep=0} /^>/ {keep++} keep>1' [input].fasta > [output].fasta
 ```
 
