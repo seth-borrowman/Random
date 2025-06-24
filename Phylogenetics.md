@@ -27,12 +27,13 @@ Before moving on, we'll need to ensure some software is available for you to use
 - iqtree2
 - treetime
 - clipkit
+- fastplong
 
 To install this as a conda environment, you can use
 
 ```{shell}
 # Create environment
-mamba create -n phylogenetics mafft iqtree treetime clipkit -c bioconda
+mamba create -n phylogenetics mafft iqtree treetime clipkit fastplong -c bioconda
 ```
 
 This creates an environment called phylogenetics that can be activated using mamba or conda. If you prefer to use conda instead of mamba, simply replace any occurence of `mamba` with `conda`.
@@ -42,7 +43,23 @@ This creates an environment called phylogenetics that can be activated using mam
 mamba activate phylogenetics
 ```
 
+## Quality filter
+
+An optional step is to apply QC filtering and adapter trimming to your reads. Here, we'll use fastplong to do this. If you're using short-reads (eg. Illumina) instead of long reads (eg. ONT), you can use fastp instead - just be sure to install it into your environment `mamba install fastp`
+
+```{shell}
+fastplong -i [input].fasta -o [output].fasta
+```
+
+There are some useful options for fastplong as well, inlcuding `--thread`, `--qualified_quality_phred`, and `--html` for an HTML report.
+
+If you are using amplicon-based sequencing, you can specify length minimums and maximums as desired with `--length-required [min-length]` and `--length_limit [max-length]`
+
+If you're unsure of what to use for different settings, it's best to leave them as the default.
+
 ## Alignment
+
+Next we can align all our reads in a Multiple Sequence Alignment (MSA), using a reference genome to speed things up.
 
 ```{shell}
 # Align reads to a referene genome
@@ -52,6 +69,12 @@ mafft --auto --thread -1 --keeplength --addfragments [input].fasta [reference].f
 This allows mafft to choose the alignment method and number of threads.
 
 ## Trimming
+
+We now need to remove the reference genome if we don't want it in our phylogenetic tree. This can be done using awk
+
+```{shell}
+awk 'BEGIN {keep=0} /^>/ {keep++} keep>1' [input].fasta > [output].fasta
+```
 
 Mask the alignment to remove sites that are not useful. To do this, we'll use clipkit, though you could use MEGA, or other software as well.
 
