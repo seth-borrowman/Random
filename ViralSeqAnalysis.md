@@ -30,7 +30,7 @@ For short-read sequencing data, use [BWA](https://github.com/lh3/bwa?tab=readme-
 ### Clean up
 This will remove reads that don't map properly and/or have a length < 1200b.
 ```{shell}
-samtools view -e 'rlen>1200' -bS -F 4 -h [NAME].sam > [NAME].bam
+samtools view -e 'rlen>1200' -bS -F 0x904 -h [NAME].sam > [NAME].bam
 samtools fastq [NAME].bam > [NAME]_filtered.fastq
 ```
 The `-e 'rlen>1200'` option is a QC filter for length. This can be shortened or removed entirely, depending on what you want the minimum fragment length to be.
@@ -47,7 +47,7 @@ Use medaka to realign our reads to the new reference, generate a consensus seque
 ```{shell}
 mv medaka/consensus.fasta [NAME]_firstcon.fasta
 rm -r medaka
-medaka_consensus -i [NAME]_filtered.fastq -d [NAME]_firstcon.fasta -o medaka -t [NTHREADS] -m r1041_e82_400bps_sup_v5.0.0
+medaka_consensus -i [READS].fastq.gz -d [NAME]_firstcon.fasta -o medaka -t [NTHREADS] -m r1041_e82_400bps_sup_v5.0.0
 mv medaka/consensus.fasta [NAME]_Consensus.fasta
 mv medaka/calls_to_draft.bam [NAME]_sorted.bam
 mv medaka/calls_to_draft.bam.bai [NAME]_sorted.bam.bai
@@ -60,12 +60,12 @@ For your convenience
 for i in *.fastq.gz; do \
   base=$(basename -s .fastq.gz $i); \
   minimap2 -ax lr:hq [PATH]/[REFERENCE].fas $i > ${base}.sam; \
-  samtools view -e 'rlen>1200' -bS -F 4 -h ${base}.sam > ${base}.bam; \
+  samtools view -e 'rlen>1200' -bS -F 0x904 -h ${base}.sam > ${base}.bam; \
   samtools fastq ${base}.bam > ${base}_filtered.fastq; \
   medaka_consensus -i ${base}_filtered.fastq -d [PATH]/[REFERENCE].fas -o medaka -t [NTHREADS] -m r1041_e82_400bps_sup_v5.0.0 -g; \
   mv medaka/consensus.fasta ${base}_firstcon.fasta; \
   rm -r medaka; \
-  medaka_consensus -i ${base}_filtered.fastq -d ${base}_firstcon.fasta -o medaka -t [NTHREADS] -m r1041_e82_400bps_sup_v5.0.0; \
+  medaka_consensus -i $i -d ${base}_firstcon.fasta -o medaka -t [NTHREADS] -m r1041_e82_400bps_sup_v5.0.0; \
   mv medaka/consensus.fasta ${base}_Consensus.fasta; \
   mv medaka/calls_to_draft.bam ${base}_sorted.bam; \
   mv medaka/calls_to_draft.bam.bai ${base}_sorted.bam.bai; \
