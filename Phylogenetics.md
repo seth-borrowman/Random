@@ -25,7 +25,7 @@ This can be used as your input in the following Alignment step.
 Before moving on, we'll need to ensure some software is available for you to use. I prefer to use conda/mamba for this, but installing software locally on you computer works as well. The software that's needed includes
 
 - mafft
-- iqtree2
+- iqtree
 - treetime
 - clipkit
 - fastplong
@@ -88,14 +88,14 @@ clipkit -l -o [output].fasta [input].fasta
 
 ## ML Phylogeny
 
-Build a maximum likelihood phylogenetic tree. Currently, we're using iqtree2 - this may be updated in future versions as iqtree3 was recently released.
+Build a maximum likelihood phylogenetic tree. The current version of iqtree is iqtree3, though the command should work with iqtree2 as well.
 
 ```{shell}
 # ML Tree
-iqtree2 -s [trimmed input].fasta -T AUTO -alrt 1000 --safe -msub viral -cptime 20
+iqtree -s [trimmed input].fasta -T AUTO -alrt 1000 --safe -msub viral -cptime 20
 ```
 
-This allows iqtree2 to choose the phylogenetic model, but limits it to viral models. It runs a 1000x bootstrap on an automatically decided number of threads and stores data to allow the user to resume if the job ends prematurely.
+This allows iqtree to choose the phylogenetic model, but limits it to viral models. It runs a 1000x bootstrap on an automatically decided number of threads and stores data to allow the user to resume if the job ends prematurely.
 
 If the best model has already been found, it can be specified like `-m GTR+F+I+R5` in place of `-msub viral`
 
