@@ -82,3 +82,20 @@ for i in [###modify_accotdingly###]*.fastq.gz; \
   samtools sort -o ${base}_sorted.bam ${base}.bam; \
   samtools index ${base}_sorted.bam; done
 ```
+
+
+## Following Dorado (w/ ivar)
+```{shell}
+while read N1 N2; \
+  do samtools fastq *${N1}.bam > ${N2}.fastq; \
+  minimap2 -ax lr:hq ref.fasta ${N2}.fastq > ${N2}.sam; \
+  samtools view -bS -F 0x904 -h ${N2}.sam > ${N2}.bam; \
+  samtools sort ${N2}.bam > ${N2}_sorted.bam; \
+  samtools mpileup -aa -A -d 0 -Q 0 ${N2}_sorted.bam | ivar consensus -p ${N2}_con1 -c 0.5 -n N; \
+  rm ${N2}.sam ${N2}.bam ${N2}_sorted.bam; \
+  minimap2 -ax lr:hq ${N2}_con1.fa ${N2}.fastq > ${N2}.sam; \
+  samtools view -bS -F 0x904 -h ${N2}.sam > ${N2}.bam; \
+  samtools sort ${N2}.bam > ${N2}_sorted.bam; \
+  samtools index ${N2}_sorted.bam; \
+done < barcodes.txt
+```
