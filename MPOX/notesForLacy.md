@@ -139,8 +139,11 @@ iqtree -s masked.fasta -T AUTO -alrt 1000 --safe -msub viral -cptime 20
 This should generally match what Ramon has done in the past, with a few small deviations, mostly due to software updates:
 
 > *Genome assembly*
+>
 > Quality filtered nanopore reads were aligned to the reference sequence MPXV-M5312_HM12_Rivers (NC_063383.1) using minimap2 v.2.26-r1175 with the nanopore specific configuration using the ‘map-ont’ option. Samtools v1.17 was used to generate a full genome consensus sequence for each sample with a minimum alignment depth of 100 reads and minimum base quality of 10. With this initial consensus we performed a sample-specific alignment using minimap2 with the same conditions and generated an improved final consensus. Consensus sequences with ≥ 10% missing bases were discarded. For each consensus sequence hMPXV lineage assessment was performed using Nextclade with the hMPXV (all clades) reference dataset.
+>
 > *Phylogenetic analysis*
+>
 > All NM full genome consensus sequences were aligned using MAFFT v7.453 software including the NC_063383.1 reference genome. Regions with poor alignment scores were eliminated using the Gblocks tool implemented in seaview v5.0.4. Maximum Likelihood (ML) phylogenies were inferred with IQ-Tree v2.0.5 using its Model Finder function before each analysis to estimate the nucleotide substitution model best-fitted for each dataset by means of Bayesian information criterion (BIC). We assessed the tree topology for each phylogeny both with the Shimodaira–Hasegawa approximate likelihood-ratio test (SH-aLRT) with 1000 replicates.
 
 ### Some differences
