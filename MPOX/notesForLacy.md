@@ -64,12 +64,12 @@ barcode01    MPOX_Sample1
 barcode02    MPOX_Sample2
 ```
 
-Then we can assemble consensus sequences and aligned BAM files:
+Then we can assemble consensus sequences and aligned BAM files. Align our reads based on the reference file (included in this github folder):
 
 ```shell
 while read N1 N2; \
   do samtools fastq *${N1}.bam > ${N2}.fastq; \
-  minimap2 -ax lr:hq ref.fasta ${N2}.fastq > ${N2}.sam; \
+  minimap2 -ax lr:hq MPXV-M5312_HM12_Rivers.fa ${N2}.fastq > ${N2}.sam; \
   samtools view -bS -F 0x904 -h ${N2}.sam > ${N2}.bam; \
   samtools sort ${N2}.bam > ${N2}_sorted.bam; \
   samtools mpileup -aa -A -d 0 -Q 0 ${N2}_sorted.bam | ivar consensus -p ${N2}_con1 -q 10 -m 100 -k; \
