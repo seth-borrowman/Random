@@ -4,6 +4,27 @@
 
 [Download dorado](https://software-docs.nanoporetech.com/dorado/latest/#installation).
 
+Make a new mamba environment for today
+
+```shell
+mamba create -n mpox
+```
+
+This creates a new environment called `mpox`. We can see where all the files are stored with `mamba env list | grep mpox` and activate the environment with `mamba activate mpox`.
+
+We'll move all our dorado files to the mamba environment
+
+```shell
+# decompress dorado
+tar -xzvf dorado-1.2.0-linux-x64.tar.gz
+# Move files into our mamba environment
+# Replace the destination with the path to your mamba environment (see above)
+mv dorado-1.2.0-linux-x64/bin/* ~/.conda/envs/mpox/bin
+mv dorado-1.2.0-linux-x64/lib/* ~/.conda/envs/mpox/lib
+```
+
+You should now be able to run dorado when the environment is activated. Test this with `which dorado` and `dorado -v`.
+
 Start a GPU-capable slurm instance (either interactive or scripted).
 
 ```shell
@@ -25,8 +46,7 @@ cd demuxed
 You'll need an evironment with all the needed tools. If you don't already have one, you can use
 
 ```shell
-mamba create -n assembly minimap2 samtools ivar -c conda-forge -c bioconda
-mamba activate assembly
+mamba install minimap2 samtools ivar -c conda-forge -c bioconda
 ```
 
 Create a text file with all your barcode names (I'll assume it's called barcodes.txt)
