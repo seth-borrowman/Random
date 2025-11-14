@@ -27,6 +27,14 @@ You should now be able to run dorado when the environment is activated. Test thi
 
 Start a GPU-capable slurm instance (either interactive or scripted).
 
+You can start an interactive job with 4 GPUs like this:
+
+```shell
+srun -N 1 -n 1 --account=b1042 --mem=16G --partition=genomics-gpu --time=02:00:00 --gres=gpu:4 --pty bash -l
+```
+
+Run the basecaller -- this will use all the files in the folder `pod5/` and put the output in a new folder called `basecalled/`
+
 ```shell
 dorado basecaller --kit-name SQK-NBD114-24 -o basecalled sup pod5
 ```
