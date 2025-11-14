@@ -26,6 +26,7 @@ You'll need an evironment with all the needed tools. If you don't already have o
 
 ```shell
 mamba create -n assembly minimap2 samtools ivar -c conda-forge -c bioconda
+mamba activate assembly
 ```
 
 Create a text file with all your barcode names (I'll assume it's called barcodes.txt)
