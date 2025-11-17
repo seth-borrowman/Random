@@ -38,6 +38,8 @@ srun -N 1 -n 1 --account=b1042 --mem=16G --partition=genomics-gpu --time=02:00:0
 Run the basecaller -- this will use all the files in the folder `pod5/` and put the output in a new folder called `basecalled/`
 
 ```shell
+# Reactivate our conda environment in the allocation
+conda activate mpox
 dorado basecaller --kit-name SQK-NBD114-24 -o basecalled sup pod5
 ```
 
