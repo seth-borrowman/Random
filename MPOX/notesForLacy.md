@@ -72,12 +72,13 @@ Then we can assemble consensus sequences and aligned BAM files. Align our reads 
 
 ```shell
 while read N1 N2; \
-  do samtools fastq *${N1}.bam > ${N2}.fastq; \
+  do cp ${N1}/*.bam .;
+  samtools fastq *${N1}*.bam > ${N2}.fastq; \
   minimap2 -ax lr:hq MPXV-M5312_HM12_Rivers.fa ${N2}.fastq > ${N2}.sam; \
   samtools view -bS -F 0x904 -h ${N2}.sam > ${N2}.bam; \
   samtools sort ${N2}.bam > ${N2}_sorted.bam; \
   samtools mpileup -aa -A -d 0 -Q 0 ${N2}_sorted.bam | ivar consensus -p ${N2}_con1 -q 10 -m 100 -k; \
-  rm ${N2}.sam ${N2}.bam ${N2}_sorted.bam; \
+  rm *${N1}*.bam ${N2}.sam ${N2}.bam ${N2}_sorted.bam; \
   minimap2 -ax lr:hq ${N2}_con1.fa ${N2}.fastq > ${N2}.sam; \
   samtools view -bS -F 0x904 -h ${N2}.sam > ${N2}.bam; \
   samtools sort ${N2}.bam > ${N2}_sorted.bam; \
