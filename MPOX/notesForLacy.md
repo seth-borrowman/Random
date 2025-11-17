@@ -84,7 +84,7 @@ while read N1 N2; \
   samtools sort ${N2}.bam > ${N2}_sorted.bam; \
   samtools index ${N2}_sorted.bam; \
   samtools mpileup -aa -A -d 0 -Q 0 ${N2}_sorted.bam | ivar consensus -p ${N2}_consensus -q 10 -t 0.5 -n N; \
-  rm ${N2}.sam ${N2}.bam ${N2}.fastq; \
+  rm ${N2}.sam ${N2}.bam ${N2}.fastq ${N2}_con1*; \
 done < barcodes.txt
 ```
 
