@@ -18,6 +18,8 @@ We'll move all our dorado files to the mamba environment
 # decompress dorado
 tar -xzvf dorado-1.2.0-linux-x64.tar.gz
 # Move files into our mamba environment
+mkdir ~/.conda/envs/mpox/bin
+mkdir ~/.conda/envs/mpox/lib
 # Replace the destination with the path to your mamba environment (see above)
 mv dorado-1.2.0-linux-x64/bin/* ~/.conda/envs/mpox/bin
 mv dorado-1.2.0-linux-x64/lib/* ~/.conda/envs/mpox/lib
