@@ -45,14 +45,6 @@ dorado basecaller --kit-name SQK-NBD114-24 -o basecalled sup pod5
 
 If you didn't give dorado enough time on slurm, you can use `--resume-from [basecalled.bam]` to resume your basecalling from where it stopped.
 
-Once basecalling is finished, you have to split the BAM file into one per barcode:
-
-```shell
-cd basecalled
-dorado demux --no-classify -o demuxed [basecalled.bam]
-cd demuxed
-```
-
 ## Genome assembly
 
 You'll need an evironment with all the needed tools. If you don't already have one, you can use
